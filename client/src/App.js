@@ -1,7 +1,12 @@
+import Start from './components/Start'
+import WaitRoom from './components/WaitRoom'
+import useSessionStorage from './hooks/useSessionStorage';
+
 function App() {
+  const [id, setId] = useSessionStorage('id', '')
+
   return (
-    <div className="App">
-    </div>
+    id ? <WaitRoom id={id} /> : <Start/>
   );
 }
 
