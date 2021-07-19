@@ -12,12 +12,15 @@ export function SocketProvider({ id, children }) {
 
   useEffect(() => {
     const newSocket = io(
-      'http://localhost:5000',
+      'http://localhost:4000',
       { query: { id } }
     )
     setSocket(newSocket)
 
-    return () => newSocket.close()
+    // return () => {
+    //   console.log("closing socket")
+    //   newSocket.close()
+    // }
   }, [id])
 
   return (

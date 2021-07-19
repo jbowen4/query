@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import useSessionStorage from '../hooks/useSessionStorage';
+import { useGameContext } from '../contexts/GameProvider';
 
 const Start = () => {
+    const { name, setName, handleJoin } = useGameContext() 
+
     const [isJoin, setIsJoin] = useState(false)
     const [code, setCode] = useState('')
-    const [name, setName] = useSessionStorage('name', '')
 
     return (
         <div className="container">
@@ -24,10 +26,9 @@ const Start = () => {
                 disabled={!isJoin}
                 placeholder="Game Code"
                 onChange={e => {
-                    if (isJoin) setCode({code: e.target.value}
-                )}}
+                    if (isJoin) setCode(e.target.value)}}
             />
-            <div class="mode-container">
+            <div className="mode-container">
                 <button 
                     className={`${isJoin ? '' : 'selected'} mode-btn`}
                     onClick={() => setIsJoin(!isJoin)}>
@@ -39,7 +40,9 @@ const Start = () => {
                     Join Game
                 </button>
             </div>
-            <button class="submit">Go</button>
+            <button 
+                className="submit" 
+                onClick={() => handleJoin(isJoin, code)}>Go</button>
         </div>
     )
 }

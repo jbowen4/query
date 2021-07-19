@@ -1,12 +1,17 @@
 import Start from './components/Start'
-import WaitRoom from './components/WaitRoom'
+import { GameProvider } from './contexts/GameProvider';
+import { SocketProvider } from './contexts/SocketProvider';
 import useSessionStorage from './hooks/useSessionStorage';
 
 function App() {
-  const [id, setId] = useSessionStorage('user_id', '')
+  const [userId, setUserId] = useSessionStorage('user_id', '')
 
   return (
-    id ? <WaitRoom id={id} /> : <Start/>
+    <SocketProvider id={userId}>
+      <GameProvider createId={setUserId}>
+        <Start /> 
+      </GameProvider>
+    </SocketProvider>
   );
 }
 
