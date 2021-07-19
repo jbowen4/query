@@ -7,7 +7,8 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 io.on('connection', socket => {
-    console.log('New WS Connection...');
+    const id = socket.handshake.query.id;
+    
  });
  
  const PORT = 4000 || process.env.PORT;
