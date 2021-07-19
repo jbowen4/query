@@ -11,26 +11,30 @@ export function useGameContext() {
 
 //roomID, room users, isWaiting
 
-export function GameProvider({ createId, children }) {
+export function GameProvider({ userId, createId, children }) {
     const [name, setName] = useSessionStorage('name', '')
     const [roomId, setRoomId] = useSessionStorage('room_id', '')
     const [roomUsers, setRoomUsers] = useSessionStorage('room_users', [])
     const socket = useSocket()
 
     function handleJoin(isJoin, roomIdInput) {
-        // create new userId
-        createId(nanoid())
+        var uid='';
+
+        if (userId === "") {
+            uid = nanoid()
+            createId(uid)
+        } else {
+            uid= userId
+        }
 
         if (isJoin) {
             // if (roomIdInput.length === 7) {
-                socket.emit("join_room", { room: roomIdInput, username: name });
+                socket.emit("join_room", { uid: uid, room: roomIdInput, username: name });
             // }
 
         } else {
             const newRoomId = nanoid(7)
-            console.log(newRoomId)
-            console.log(name)
-            socket.emit("make_room", { room: newRoomId, username: name });
+            socket.emit("make_room", { uid: uid, room: newRoomId, username: name });
         }
     }
 
@@ -38,17 +42,18 @@ export function GameProvider({ createId, children }) {
         if (socket == null) return
 
         socket.on('joinSuccess', (room) => {
-            console.log(room)
+            setRoomId(room)
         })
 
         socket.on('joinFailure', () => console.log('nooooo'))
 
         socket.on('roomUsers', users => {
-            console.log(users)
+            setRoomUsers(users)
         })
 
+        // TODO: Fix
         return () => socket.off('receive-message')
-    }, [socket])
+    }, [socket, setRoomId, setRoomUsers])
 
     const value = {
         name,

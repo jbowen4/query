@@ -5,6 +5,7 @@ const {
     userJoin,
     getCurrentUser,
     userLeave,
+    userExists,
     getRoomUsers
 } = require('./utils/users');
 
@@ -19,9 +20,13 @@ const io = socketio(server, {
 io.on('connection', socket => {
     const id = socket.handshake.query.id;
 
-    socket.on('make_room', ({room, username}) => {
+    socket.on('make_room', ({ uid, room, username}) => {
         // Create new user
-        const user = userJoin(id, username, room);
+        if (userExists(uid)) {
+            return
+        }
+
+        const user = userJoin(uid, username, room);
   
         // Join
         socket.join(room)
@@ -37,15 +42,23 @@ io.on('connection', socket => {
         });
     })
 
-    socket.on('join_room', ({ room, username }) => {
+    socket.on('join_room', ({ uid, room, username }) => {
+        if (userExists(uid)) {
+            return
+        }
+
         // Create new user
-        const user = userJoin(id, username, room);
+        const user = userJoin(uid, username, room);
+
+        // TODO: Check if room exists
     
         // Join
         socket.join(room)
         
         // Emit to user entered new room successfully
-        socket.emit("joinSuccess")
+        socket.emit("joinSuccess", {
+            room: user.room,
+        })
         
         // Send users and room info
         io.to(user.room).emit('roomUsers', {

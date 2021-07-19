@@ -6,7 +6,19 @@ function userJoin(id, username, room) {
 
   users.push(user);
 
+  console.log(users);
+
   return user;
+}
+
+function userExists(id) {
+  for (let i = 0; i < users.length; i++) {
+    if (users[i].id === id) {
+      return true
+    }
+  }
+
+  return false
 }
 
 // Get current user
@@ -32,5 +44,6 @@ module.exports = {
   userJoin,
   getCurrentUser,
   userLeave,
+  userExists,
   getRoomUsers
 };

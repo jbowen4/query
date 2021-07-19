@@ -8,7 +8,7 @@ function App() {
 
   return (
     <SocketProvider id={userId}>
-      <GameProvider createId={setUserId}>
+      <GameProvider userId={userId} createId={setUserId}>
         <Start /> 
       </GameProvider>
     </SocketProvider>
