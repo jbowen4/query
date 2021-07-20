@@ -1,7 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react'
 import useSessionStorage from '../hooks/useSessionStorage'
 import { useSocket } from './SocketProvider'
-import { nanoid } from 'nanoid'
+import { nanoid, customAlphabet } from 'nanoid'
+
+const nanoidCode = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789', 8)
 
 const GameContext = React.createContext()
 
@@ -34,8 +36,14 @@ export function GameProvider({ userId, createId, children }) {
             // }
 
         } else {
-            const newRoomId = nanoid(7)
+            const newRoomId = nanoidCode()
             socket.emit("make_room", { uid: uid, room: newRoomId, username: name });
+        }
+    }
+
+    function startGame() {
+        if (roomUsers.length >= 3) {
+            socket.emit("start_game", { room: roomId })
         }
     }
 
@@ -53,6 +61,10 @@ export function GameProvider({ userId, createId, children }) {
             setScreen('waiting')
         })
 
+        socket.on('startGame', () => {
+            setScreen('game')
+        })
+
         // TODO: Fix
         //return () => socket.off('receive-message')
     }, [socket, setRoomId, setRoomUsers])
@@ -68,6 +80,7 @@ export function GameProvider({ userId, createId, children }) {
         roomId,
         setName,
         screen,
+        startGame,
         roomUsers,
         handleJoin,
         endGame

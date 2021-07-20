@@ -66,6 +66,10 @@ io.on('connection', socket => {
         });
     })
 
+    socket.on('start_game', ({ room }) => {
+        io.in(room).emit('startGame')
+    })
+
     socket.on("leave_game", ({ uid, room }) => {
         userLeave(uid)
 

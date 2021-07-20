@@ -1,5 +1,6 @@
 import Start from './components/Start'
 import WaitRoom from './components/WaitRoom'
+import Game from './components/Game'
 import { GameProvider } from './contexts/GameProvider';
 import { SocketProvider } from './contexts/SocketProvider';
 import useSessionStorage from './hooks/useSessionStorage';
@@ -15,6 +16,7 @@ function App() {
           <Switch>
             <Route exact path="/"><Start/></Route>
             <Route path="/waiting"><WaitRoom/></Route>
+            <Route path="/game"><Game/></Route>
           </Switch>
         </Router>
       </GameProvider>

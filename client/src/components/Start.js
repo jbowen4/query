@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useGameContext } from '../contexts/GameProvider';
 import { useHistory } from "react-router-dom";
-import useSessionStorage from '../hooks/useSessionStorage';
 
 const Start = () => {
     let history = useHistory();
@@ -11,9 +10,7 @@ const Start = () => {
     const [code, setCode] = useState('')
 
     useEffect(() => {
-        console.log(screen)
         if (screen === 'waiting') {
-            console.log(screen)
             history.push('/waiting')
         }
        
