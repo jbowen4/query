@@ -1,12 +1,23 @@
 import { useState, useEffect } from 'react'
-import useSessionStorage from '../hooks/useSessionStorage';
 import { useGameContext } from '../contexts/GameProvider';
+import { useHistory } from "react-router-dom";
+import useSessionStorage from '../hooks/useSessionStorage';
 
 const Start = () => {
-    const { name, setName, handleJoin } = useGameContext() 
+    let history = useHistory();
+    const { name, screen, setName, handleJoin } = useGameContext() 
 
     const [isJoin, setIsJoin] = useState(false)
     const [code, setCode] = useState('')
+
+    useEffect(() => {
+        console.log(screen)
+        if (screen === 'waiting') {
+            console.log(screen)
+            history.push('/waiting')
+        }
+       
+    }, [screen, history])
 
     return (
         <div className="container">
@@ -31,12 +42,12 @@ const Start = () => {
             <div className="mode-container">
                 <button 
                     className={`${isJoin ? '' : 'selected'} mode-btn`}
-                    onClick={() => setIsJoin(!isJoin)}>
+                    onClick={() => setIsJoin(false)}>
                     Start Game
                 </button>
                 <button 
                     className={`${isJoin ? 'selected' : ''} mode-btn`}
-                    onClick={() => setIsJoin(!isJoin)}>
+                    onClick={() => setIsJoin(true)}>
                     Join Game
                 </button>
             </div>

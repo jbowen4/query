@@ -33,12 +33,12 @@ io.on('connection', socket => {
   
         // Emit to user entered new room successfully
         socket.emit('joinSuccess', {
-            room: user.room,
+            room: room,
         })
   
         // Send users and room info
-        io.to(room).emit('roomUsers', {
-            users: getRoomUsers(user.room)
+        io.in(room).emit('roomUsers', {
+            users: getRoomUsers(room)
         });
     })
 
@@ -57,14 +57,21 @@ io.on('connection', socket => {
         
         // Emit to user entered new room successfully
         socket.emit("joinSuccess", {
-            room: user.room,
+            room: room,
         })
         
         // Send users and room info
-        io.to(user.room).emit('roomUsers', {
-            room: user.room,
-            users: getRoomUsers(user.room)
+        io.in(room).emit('roomUsers', {
+            users: getRoomUsers(room)
         });
+    })
+
+    socket.on("leave_game", ({ uid, room }) => {
+        userLeave(uid)
+
+        io.in(room).emit('roomUsers', {
+            users: getRoomUsers(room)
+        })
     })
  });
  

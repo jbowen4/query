@@ -17,6 +17,9 @@ export function SocketProvider({ id, children }) {
     )
     setSocket(newSocket)
 
+    // TODO: Close socket connection
+    // When does useEffect end/close? 
+
     // return () => {
     //   console.log("closing socket")
     //   newSocket.close()
